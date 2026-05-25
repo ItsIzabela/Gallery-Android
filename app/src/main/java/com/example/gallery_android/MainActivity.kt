@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.gallery_android.ui.theme.DustyWhite
 import com.example.gallery_android.ui.theme.GalleryAndroidTheme
+import com.example.gallery_android.ui.theme.PinkSand
+import androidx.compose.material3.ButtonDefaults
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +51,12 @@ fun ImagePickerScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Button(onClick = { launcher.launch("image/*") }) {
+        Button(
+            onClick = { launcher.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PinkSand,
+            )
+        ) {
             Text("Wybierz obraz z urządzenia")
         }
 
