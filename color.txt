@@ -1,0 +1,9 @@
+Bright blue: #51e2f5
+
+Blue Green: #9df9ef
+
+Dusty White: #fff1ec
+
+Pink Sand: #ffa8B6
+
+Dark Sand: #a28089
