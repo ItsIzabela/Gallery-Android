@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(DustyWhite)
+                        .background(DarkSand)
                 ) {
                     ImagePickerScreen()
                 }
