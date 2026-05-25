@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(DustyWhite)
+                        .background(DarkSand)
                 ) {
                     ImagePickerScreen()
                 }
@@ -79,7 +79,7 @@ fun ImagePickerScreen() {
                 containerColor = BlueGreen,
             )
         ) {
-            Text("Die", color = BrightBlue, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(":3", color = BrightBlue, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
 
 
