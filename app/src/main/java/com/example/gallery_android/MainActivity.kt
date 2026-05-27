@@ -9,6 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -17,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +32,7 @@ import com.example.gallery_android.ui.theme.DarkSand
 import com.example.gallery_android.ui.theme.DustyWhite
 import com.example.gallery_android.ui.theme.GalleryAndroidTheme
 import com.example.gallery_android.ui.theme.PinkSand
+import androidx.compose.foundation.lazy.grid.items
 
 
 class MainActivity : ComponentActivity() {
@@ -49,12 +54,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ImagePickerScreen() {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        imageUri = uri
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris: List<Uri> ->
+        imageUris = uris
     }
 
     Column(
@@ -70,7 +75,12 @@ fun ImagePickerScreen() {
                 containerColor = PinkSand,
             )
         ) {
-            Text("Choose your picture to edit", color = DarkSand, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "Choose your picture to edit",
+                color = DarkSand,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
         Button(
@@ -85,15 +95,23 @@ fun ImagePickerScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        imageUri?.let { uri ->
-            Image(
-                painter = rememberAsyncImagePainter(uri),
-                contentDescription = "Choosen",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(imageUris) { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(uri),
+                    contentDescription = "Choosen",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                )
 
+            }
         }
     }
 }
