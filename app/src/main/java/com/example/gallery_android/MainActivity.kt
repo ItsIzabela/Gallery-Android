@@ -8,32 +8,27 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.gallery_android.ui.theme.BlueGreen
-import com.example.gallery_android.ui.theme.BrightBlue
-import com.example.gallery_android.ui.theme.DarkSand
-import com.example.gallery_android.ui.theme.DustyWhite
-import com.example.gallery_android.ui.theme.GalleryAndroidTheme
-import com.example.gallery_android.ui.theme.PinkSand
-import androidx.compose.foundation.lazy.grid.items
-
+import com.example.gallery_android.ui.theme.*
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,17 +44,33 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
+}
 
 @Composable
 fun ImagePickerScreen() {
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    var selectedIndex by remember { mutableStateOf<Int?>(null) }
 
+    // wybór wielu zdjęć
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
-    ) { uris: List<Uri> ->
+    ) { uris ->
         imageUris = uris
+    }
+
+    // edytor zdjęcia (crop)
+    val cropLauncher = rememberLauncherForActivityResult(
+        contract = CropImageContract()
+    ) { result ->
+        if (result.isSuccessful && selectedIndex != null) {
+            val newUri = result.uriContent
+            if (newUri != null) {
+                imageUris = imageUris.toMutableList().also {
+                    it[selectedIndex!!] = newUri
+                }
+            }
+        }
     }
 
     Column(
@@ -71,9 +82,7 @@ fun ImagePickerScreen() {
 
         Button(
             onClick = { launcher.launch("image/*") },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PinkSand,
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = PinkSand)
         ) {
             Text(
                 "Choose your picture to edit",
@@ -85,13 +94,10 @@ fun ImagePickerScreen() {
 
         Button(
             onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BlueGreen,
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = BlueGreen)
         ) {
             Text(":3", color = BrightBlue, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
-
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -102,28 +108,26 @@ fun ImagePickerScreen() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(imageUris) { uri ->
+                val index = imageUris.indexOf(uri)
+
                 Image(
                     painter = rememberAsyncImagePainter(uri),
-                    contentDescription = "Choosen",
+                    contentDescription = "Chosen",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
+                        .clickable {
+                            selectedIndex = index
+                            cropLauncher.launch(
+                                CropImageContractOptions(
+                                    uri = uri,
+                                    cropImageOptions = CropImageOptions()
+                                )
+                            )
+                        }
                 )
-
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewImagePicker() {
-    GalleryAndroidTheme {
-        ImagePickerScreen()
-    }
-}
-
-
-
 }
