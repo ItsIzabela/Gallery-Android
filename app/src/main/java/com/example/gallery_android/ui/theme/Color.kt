@@ -2,8 +2,8 @@ package com.example.gallery_android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val BrightBlue = Color(0xFF51E2F5)
-val BlueGreen = Color(0xFF9DF9EF)
-val DustyWhite = Color(0xFFFFF1EC)
-val PinkSand = Color(0xFFFFA8B6)
-val DarkSand = Color(0xFF09192C)
+
+val Red = Color(0xFFA52422)
+val Black = Color(0xFF080F0F)
+val Grey = Color(0xED080F0F)
+val SmokeWhite = Color(0xFFF5F5F5)

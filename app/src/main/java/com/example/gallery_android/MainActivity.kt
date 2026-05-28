@@ -26,12 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.gallery_android.ui.theme.BlueGreen
-import com.example.gallery_android.ui.theme.BrightBlue
-import com.example.gallery_android.ui.theme.DarkSand
-import com.example.gallery_android.ui.theme.DustyWhite
+import com.example.gallery_android.ui.theme.Red
+import com.example.gallery_android.ui.theme.Black
+import com.example.gallery_android.ui.theme.SmokeWhite
+import com.example.gallery_android.ui.theme.Grey
 import com.example.gallery_android.ui.theme.GalleryAndroidTheme
-import com.example.gallery_android.ui.theme.PinkSand
 import androidx.compose.foundation.lazy.grid.items
 
 
@@ -43,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(DarkSand)
+                        .background(Grey)
                 ) {
                     ImagePickerScreen()
                 }
@@ -52,69 +51,99 @@ class MainActivity : ComponentActivity() {
 
     }
 
-@Composable
-fun ImagePickerScreen() {
-    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    @Composable
+    fun ImagePickerScreen() {
+        var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetMultipleContents()
-    ) { uris: List<Uri> ->
-        imageUris = uris
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Button(
-            onClick = { launcher.launch("image/*") },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PinkSand,
-            )
-        ) {
-            Text(
-                "Choose your picture to edit",
-                color = DarkSand,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetMultipleContents()
+        ) { uris: List<Uri> ->
+            imageUris = uris
         }
 
-        Button(
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BlueGreen,
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Grey)
         ) {
-            Text(":3", color = BrightBlue, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Black)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Gallery App",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SmokeWhite
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(imageUris) { uri ->
-                Image(
-                    painter = rememberAsyncImagePainter(uri),
-                    contentDescription = "Choosen",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
                 )
+            }
 
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(imageUris) { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = "Chosen",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Black)
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Button(
+                    onClick = { launcher.launch("image/*") },
+                    colors = ButtonDefaults.buttonColors(containerColor = Red),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Select", color = SmokeWhite)
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Button(
+                    onClick = { /* TODO */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Red),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Delete", color = SmokeWhite)
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Button(
+                    onClick = { /* TODO */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Red),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Edit", color = SmokeWhite)
+                }
             }
         }
     }
-}
+
 
 @Preview(showBackground = true)
 @Composable
