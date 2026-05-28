@@ -9,6 +9,7 @@ lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 composeBom = "2024.09.00"
 coil = "2.6.0"
+canhub = "4.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,7 +27,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-photoeditor = { module = "com.burhanrashid52:photoeditor", version = "3.0.1" }
+canhub-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "canhub" }
 
 
 [plugins]
