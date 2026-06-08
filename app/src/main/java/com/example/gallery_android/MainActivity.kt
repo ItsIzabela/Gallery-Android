@@ -146,7 +146,7 @@ fun ImageEditorApp() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Gallery Editor",
+                text = "Editique",
                 color = SmokeWhite,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
